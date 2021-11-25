@@ -1,16 +1,37 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
+import { useSpring, animated } from 'react-spring'
 
 function Top() {
+    const navigate = useNavigate()
+
+    const to = {
+        transform: 'translateY(0)',
+        opacity: 1
+    }
+
+    const from = {
+        transform: 'translateX(-60px)',
+        opacity: 0
+    }
+
+    const customAnimation = useSpring({ 
+        loop: false,
+        delay: 500,
+        to,
+        from
+    });
+
     return (
         <TopWrap>
-            <Logo>
-                <h3>FSH</h3>
-                <p>Find Specific Hospital</p>
-            </Logo>
-            <LogoDesc>
-                　· 경기도 특수 수술/시술 병원찾기 서비스
-            </LogoDesc>
+            <TopBorder />
+            <animated.div style={customAnimation}>
+                <Logo onClick={() => navigate('/main')}>
+                    <h3>FSH+</h3>
+                    <p>FIND<br/>Specific Hospital</p>
+                </Logo>
+            </animated.div>
         </TopWrap>
     )
 }
@@ -20,10 +41,19 @@ export default Top
 const TopWrap = styled.div`
     width: 100%;
     padding: 25px;
-    border-bottom: 1px solid #e8eaee;
+`
+
+const TopBorder = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(160deg, var(--primary), var(--third));
 `
 
 const Logo = styled.div`
+    cursor: pointer;
     display: flex;
     height: 40px;
     justify-content: flex-start;
@@ -31,30 +61,30 @@ const Logo = styled.div`
     flex-direction: row;
 
     h3 {
-        font-family: 'paybooc-ExtraBold';
-        color: #2955a1;
+        color: var(--primary);
         font-size: 28px;
-        border-radius: 8px;
-        font-weight: bold;
+        font-weight: 800;
+        font-family: var(--enFont);
+        padding-right: 15px;
+        border-right: 1px solid var(--borderColor);
+    }
+
+    img {
+        width: 22px;
+        height: 22px;
+        vertical-align: top;
+        margin-right: 10px;
     }
 
     p {
+        margin-top: 1px;
         border-radius: 3px;
-        margin-left: 10px;
-        padding: 4px 6px 4px 6px;
-        font-size: 11px;
+        margin-left: 15px;
+        font-size: 10px;
+        line-height: 12px;
+        font-weight: 500;
         letter-spacing: 0px;
-        color: #fff;
-        background: #2955a1;
+        color: var(--sub);
+        font-family: var(--enFont);
     }
-`
-
-const LogoDesc = styled.div`
-    margin-top: 5px;
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-    color: #6c6f75;
 `
