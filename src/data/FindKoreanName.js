@@ -62,6 +62,35 @@ export const FindKoreanName = ( searchCode ) => {
             result = '안와골절정복술'
             break;
         }
+        // 이식술
+        case 'corneal': {
+            result = '각막이식술'
+            break;
+        }
+        case 'liver': {
+            result = '간이식술'
+            break;
+        }
+        case 'kidney': {
+            result = '신장이식술'
+            break;
+        }
+        case 'heart': {
+            result = '심장이식술'
+            break;
+        }
+        case 'lung': {
+            result = '폐이식술'
+            break;
+        }
+        case 'sclera': {
+            result = '공막이식술'
+            break;
+        }
+        case 'marrow': {
+            result = '골수이식술'
+            break;
+        }
         default: {
             break;
         }

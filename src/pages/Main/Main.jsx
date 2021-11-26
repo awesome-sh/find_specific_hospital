@@ -4,12 +4,15 @@ import { useSpring, animated } from 'react-spring'
 
 import { FindKoreanName } from '../../data/FindKoreanName'
 import OPEN_DATA from '../../data/gyeonggi-open-data.json'
+import TRANSPLANTATION_DATA from '../../data/transplantation.json'
 import { useNavigate } from 'react-router-dom'
 
 function Main() {
-    const categories = Object.keys(OPEN_DATA)
     const navigate = useNavigate()
 
+    const categories = Object.keys(OPEN_DATA)
+    const transCategories = Object.keys(TRANSPLANTATION_DATA)
+    
     const to = {
         transform: 'translateY(0)',
         opacity: 1
@@ -60,13 +63,12 @@ function Main() {
     const [isDetail , setIsDetail] = useState( false )
     const [detailData, setDetailData] = useState([])
 
-
     /**
      * 해당 카테고리 디테일목록 조회
      * @param {String} category 
      */
     const handleDetail = (category) => {
-        console.log(">> Clicked Category ", category)
+        // console.log(">> Clicked Category ", category)
         navigate(`/${category}`)
     }
 
@@ -75,13 +77,23 @@ function Main() {
             <Content isDetail={isDetail} >
                 <animated.div style={customAnimation01}>
                     <TitleElement>
-                        경기도 내, 특수 수술 및 시술이
+                        특수 수술 및 시술이
                     </TitleElement>
                 </animated.div>
                 <animated.div style={customAnimation02}>
                     <TitleElement>
                         가능한 병원을 찾아보세요
                     </TitleElement>
+                </animated.div>
+
+                <animated.div style={customAnimation04}>
+                    <TextElement>
+                        경기도 내 <span>15가지 항목의 특수 수술 또는 시술이 가능한 병원 현황</span>을 제공합니다.
+                        
+                        <SubText>
+                            데이터 기준일자, 2020-02-19 (최신)
+                        </SubText>
+                    </TextElement>
                 </animated.div>
 
                 <animated.div style={customAnimation03}>
@@ -94,16 +106,39 @@ function Main() {
                     </GroupSection>
                 </animated.div>
                 
+                <hr/>
+                
+                <animated.div style={customAnimation01}>
+                    <TitleElement>
+                        장기이식 수술이
+                    </TitleElement>
+                </animated.div>
+                <animated.div style={customAnimation02}>
+                    <TitleElement>
+                        가능한 병원을 찾아보세요
+                    </TitleElement>
+                </animated.div>
+
                 <animated.div style={customAnimation04}>
                     <TextElement>
-                        FSH(Find Specific Hospital)는 경기데이터드림 공공데이터를 기반으로하여 
-                        경기도 내 <span>15가지 항목의 특수 수술 또는 시술이 가능한 병원 현황</span>을 제공합니다.
-                        <hr/>
+                        경기도 내 <span>7가지 항목의 장기이식 수술이 가능한 병원 현황</span>을 제공합니다.
                         <SubText>
-                            데이터 기준일자 : 2020-02-19 (최신)
+                            데이터 기준일자, 2021-11-01 (최신)
                         </SubText>
                     </TextElement>
                 </animated.div>
+
+                <animated.div style={customAnimation03}>
+                    <GroupSection>
+                        { transCategories.map(( category, idx ) => 
+                            <GroupItem key={idx} onClick={() => handleDetail( category )}>
+                                { FindKoreanName( category ) }
+                            </GroupItem>
+                        )}
+                    </GroupSection>
+                </animated.div>
+                
+
             </Content>
         </MainWrap>
     )
@@ -113,15 +148,14 @@ export default Main
 
 const MainWrap = styled.div`
     padding: 0px 25px;
-    height: 100vh;
     overflow: hidden;
 `
 
 const TextElement = styled.div`
-    padding-top: 30px;
+    padding-top: 15px;
     font-size: 11px;
     line-height: 20px;
-    padding-bottom: 30px;
+    padding-bottom: 15px;
 
     span {
         font-size: 12px;
@@ -131,9 +165,11 @@ const TextElement = styled.div`
 `
 
 const SubText = styled.div`
+    margin-top: 8px;
     width: 100%;
     text-align: right;
     font-size: 11px;
+    color: var(--sub);
 `
 
 const TitleElement = styled.div`
@@ -142,7 +178,6 @@ const TitleElement = styled.div`
 `
 
 const GroupSection = styled.div`
-    margin-top: 25px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 10px;
@@ -151,13 +186,14 @@ const GroupSection = styled.div`
 const GroupItem = styled.div`
     cursor: pointer;
     width: 100%;
-    height: 45px;
+    height: 50px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     border: 2px solid var(--borderColor);
     border-radius: 4px;
     padding-left: 10px;
+    font-size: 14px;
     transition: all 0.3s ease-out;
 
     &:hover {
@@ -174,5 +210,11 @@ const Content = styled.div`
     visibility: ${({isDetail}) => isDetail ? 'hidden' : 'visible'};
     opacity: ${({isDetail}) => isDetail ? '0' : '1'};
     transition: all 0.5s ease-out;
+    padding-bottom: 60px;
+
+    hr {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
 `
 

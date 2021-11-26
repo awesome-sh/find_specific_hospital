@@ -9,6 +9,9 @@ import { FindKoreanName } from '../../data/FindKoreanName'
 import LeftArrow from '../../assets/icon/left-arrow.png'
 import useClientSize from '../../hooks/useClientSize'
 
+import MapIcon from '../../assets/icon/location.png'
+import PhoneIcon from '../../assets/icon/phone-call.png'
+
 function Detail() {
     const navigate = useNavigate()
     const { category } = useParams()
@@ -50,15 +53,11 @@ function Detail() {
 
         let result = datas
 
-
-
         if(selectedGun !== '') {
             result = Array.from(new Set(originDatas.filter(v => v.SIGUN_NM === selectedNextSi && v.REFINE_LOTNO_ADDR.split(' ')[2] === selectedGun)))
         }
 
         if(selectedSi !== selectedNextSi) {
-            console.log('다른 지역을 선택함')
-            console.log(selectedSi, selectedNextSi)
             setSelectedSi(selectedNextSi)
             setSelectedGun('')
         } 
@@ -153,17 +152,24 @@ function Detail() {
                             datas.map((data, idx) => {
                                 return (
                                     <Item key={idx}>
-                                        <div className={
-                                            data.INDUTYPE_NM === '병원' ? 'type h01' 
-                                            : data.INDUTYPE_NM === '상급종합' ? 'type h02'
-                                            : data.INDUTYPE_NM === '요양병원' ? 'type h03'
-                                            : data.INDUTYPE_NM === '종합병원' ? 'type h04'
-                                            : 'type h05' // 의원
-                                        }>{data.INDUTYPE_NM}</div>
-                                        <div className="name">{data.MEDCARE_FACLT_NM}</div>
-                                        <div className="address">{data.REFINE_ROADNM_ADDR}</div>
-                                        <div className="tel"><span>전화번호</span>{data.MEDCARE_FACLT_TELNO}</div>
-                                        <div className="found_date"><span>설립일자</span>{data.FOUND_DE}</div>
+                                        <div className="left">
+                                            <div className={
+                                                data.INDUTYPE_NM === '병원' ? 'type h01' 
+                                                : data.INDUTYPE_NM === '상급종합' ? 'type h02'
+                                                : data.INDUTYPE_NM === '요양병원' ? 'type h03'
+                                                : data.INDUTYPE_NM === '종합병원' ? 'type h04'
+                                                : 'type h05' // 의원
+                                            }>{data.INDUTYPE_NM}</div>
+                                            <div className="name">{data.MEDCARE_FACLT_NM}</div>
+                                            <div className="address">{data.REFINE_ROADNM_ADDR}</div>
+                                            <div className="tel">Tel) {data.MEDCARE_FACLT_TELNO}</div>
+                                        </div>
+                                        <div className="right">
+                                            <ul>
+                                                <li><img src={MapIcon} alt="img"/></li>
+                                                <li><img src={PhoneIcon} alt="img"/></li>
+                                            </ul>
+                                        </div>
                                     </Item>
                                 )}
                             )
@@ -284,7 +290,7 @@ const SearchForm = styled.div`
 `
 
 const List = styled.div`
-    margin-top: 15px;
+    margin-top: 25px;
     padding-bottom: 30px;
 
     .non-list {
@@ -298,17 +304,64 @@ const List = styled.div`
 
 const Item = styled.div`
     padding: 15px;
-    border-radius: 6px;
-    border: 2px solid #4a4a4d;
+    border-bottom: 1px solid #4a4a4d;
     margin-bottom: 10px;
+    display: flex;
+
+    .left {
+        width: 85%;
+        margin-right: 10px;
+
+        & > div {
+           margin-bottom: 8px; 
+        }
+    }
+
+    .right {
+        width: 15%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        ul {
+            width: 70%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        li {
+            cursor: pointer;
+            width: 100%;
+            height: 35%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #636366;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease-out;
+
+            &:nth-last-child(1) {
+                margin-bottom: 0px;
+            }
+
+            &:hover {
+                background: linear-gradient(160deg, var(--primary), var(--third));
+                border: 2px solid var(--primary);
+                box-shadow: 0px 3px 5px rgba(69, 196, 133, 0.397);
+            }
+        }
+        img {
+            width: 16px;
+            height: 16px;
+        }
+    }
 
     span {
         margin-right: 10px;
-    }
-
-    & > div {
-        line-break: auto;
-        margin-bottom: 6px;
     }
 
     .type {
