@@ -37,15 +37,23 @@ function Main() {
     const customAnimation03 = useSpring({ 
         loop: false,
         delay: 500,
-        to,
-        from
+        to: {
+            opacity: 1
+        },
+        from: {
+            opacity: 0
+        }
     });
 
     const customAnimation04 = useSpring({ 
         loop: false,
         delay: 600,
-        to,
-        from
+        to: {
+            opacity: 1
+        },
+        from: {
+            opacity: 0
+        }
     });
 
     // States
@@ -64,7 +72,6 @@ function Main() {
 
     return (
         <MainWrap>
-
             <Content isDetail={isDetail} >
                 <animated.div style={customAnimation01}>
                     <TitleElement>
@@ -98,8 +105,6 @@ function Main() {
                     </TextElement>
                 </animated.div>
             </Content>
-
-            
         </MainWrap>
     )
 }
@@ -108,6 +113,8 @@ export default Main
 
 const MainWrap = styled.div`
     padding: 0px 25px;
+    height: 100vh;
+    overflow: hidden;
 `
 
 const TextElement = styled.div`

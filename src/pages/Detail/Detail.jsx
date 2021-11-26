@@ -22,7 +22,8 @@ function Detail() {
 
     const [selectedSi, setSelectedSi] = useState('')
     const [selectedGun, setSelectedGun] = useState('')
-    const [selectedType, setSelectedType] = useState('')
+
+    const [selectedNextSi, setSelectedNextSi] = useState('')
 
     useEffect(() => {
         let findData = Object.keys( OPEN_DATA ).includes( category ) ? OPEN_DATA[category] : null;
@@ -40,7 +41,7 @@ function Detail() {
     }, [category])
 
     useEffect(() => {
-        const unoverlapGun = Array.from(new Set(originDatas.filter(v => v.SIGUN_NM === selectedSi).map(v => v.REFINE_ROADNM_ADDR.split(' ')[2])))
+        const unoverlapGun = Array.from(new Set(originDatas.filter(v => v.SIGUN_NM === selectedNextSi).map(v => v.REFINE_LOTNO_ADDR.split(' ')[2])))
         setGunArr( unoverlapGun )
 
         // Type Datas
@@ -49,23 +50,29 @@ function Detail() {
 
         let result = datas
 
+
+
         if(selectedGun !== '') {
-            result = Array.from(new Set(originDatas.filter(v => v.SIGUN_NM === selectedSi && v.REFINE_ROADNM_ADDR.split(' ')[2] === selectedGun)))
+            result = Array.from(new Set(originDatas.filter(v => v.SIGUN_NM === selectedNextSi && v.REFINE_LOTNO_ADDR.split(' ')[2] === selectedGun)))
         }
 
-        if(selectedType !== '') {
-            result = result.filter(v => v.INDUTYPE_NM === selectedType)
-        }
+        if(selectedSi !== selectedNextSi) {
+            console.log('다른 지역을 선택함')
+            console.log(selectedSi, selectedNextSi)
+            setSelectedSi(selectedNextSi)
+            setSelectedGun('')
+        } 
+
 
         setDatas( result )
-    }, [selectedSi, selectedGun, selectedType])
+    }, [selectedSi,selectedNextSi,  selectedGun])
 
     const [isOverClientHeight, setIsOverClientHeight] = useState(false)
     const clientSize = useClientSize()
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsOverClientHeight(clientSize.height/4 < window.pageYOffset ? true : false)
+            setIsOverClientHeight(window.innerHeight/2 < (isNaN(window.pageYOffset) ? window.scrollY : window.pageYOffset) ? true : false)
         }
 
         window.addEventListener('scroll', handleScroll)
@@ -81,14 +88,7 @@ function Detail() {
         opacity: 0
     }
 
-    const customAnimation01 = useSpring({ 
-        loop: false,
-        delay: 300,
-        to,
-        from
-    });
-
-    const customAnimation02 = useSpring({ 
+    const customAnimation = useSpring({ 
         loop: false,
         delay: 500,
         to,
@@ -104,7 +104,7 @@ function Detail() {
             <Header isOverClientHeight={isOverClientHeight}>
                 <HeaderTop isOverClientHeight={isOverClientHeight}>
                     <h1>
-                        <animated.span style={customAnimation01}>{ FindKoreanName(category) }</animated.span> 가능한 병원
+                        <span>{ FindKoreanName(category) }</span> 가능한 병원
                     </h1>
 
                     <div className="topBtn" onClick={() => window.scrollTo(0, 0)}>
@@ -116,20 +116,21 @@ function Detail() {
                     <SearchItem>
                         <SearchLabel>지역</SearchLabel>
                         <SearchForm>
-                            <select onChange={(e) => setSelectedSi(e.target.value)}>
+                            <select onChange={(e) => setSelectedNextSi(e.target.value)} value={selectedSi}>
+                                <option>선택</option>
                                 { siArr.length > 0 && siArr.map((si, idx) => 
-                                    <option key={idx} selected={idx === 0}>{si}</option>
+                                    <option key={idx}>{si}</option>
                                 )}
                             </select>
                         </SearchForm>
                     </SearchItem>
                     <SearchItem>
-                        <SearchLabel>세부</SearchLabel>
+                        <SearchLabel>구·동·읍·면</SearchLabel>
                         <SearchForm>
-                            <select onChange={(e) => setSelectedGun(e.target.value)}>
+                            <select onChange={(e) => setSelectedGun(e.target.value)} value={selectedGun}>
                                 { gunArr.length > 0 ? 
                                     <>
-                                        <option selected>지역 선택</option>
+                                        <option selected>선택</option>
                                         {   
                                             gunArr.map((gun, idx) => 
                                                 <option key={idx}>{gun}</option>
@@ -137,44 +138,39 @@ function Detail() {
                                         }
                                     </>
                                     :
-                                    <option selected>지역 선택</option>
+                                    <option>선택</option>
                                 }
-                            </select>
-                        </SearchForm>
-                    </SearchItem>
-                    <SearchItem>
-                        <SearchLabel>업종</SearchLabel>
-                        <SearchForm>
-                            <select onChange={(e) => setSelectedType(e.target.value)}>
-                                { types.length > 0 && types.map((type, idx) => 
-                                    <option key={idx} selected={idx === 0}>{type}</option>
-                                )}
                             </select>
                         </SearchForm>
                     </SearchItem>
                 </SearchGroup>
             </Header>
 
-            <animated.div style={customAnimation02}>
+            <animated.div style={customAnimation}>
                 <List>
                     {
                         datas.length > 0 ?
                             datas.map((data, idx) => {
                                 return (
                                     <Item key={idx}>
-                                        <div className="type"><span>업종</span>{data.INDUTYPE_NM}</div>
-                                        <div className="location"><span>지역</span>{data.SIGUN_NM}</div>
-                                        <div className="name"><span>병원명</span>{data.MEDCARE_FACLT_NM}</div>
-                                        <div className="address"><span>도로명 주소</span>{data.REFINE_ROADNM_ADDR}</div>
+                                        <div className={
+                                            data.INDUTYPE_NM === '병원' ? 'type h01' 
+                                            : data.INDUTYPE_NM === '상급종합' ? 'type h02'
+                                            : data.INDUTYPE_NM === '요양병원' ? 'type h03'
+                                            : data.INDUTYPE_NM === '종합병원' ? 'type h04'
+                                            : 'type h05' // 의원
+                                        }>{data.INDUTYPE_NM}</div>
+                                        <div className="name">{data.MEDCARE_FACLT_NM}</div>
+                                        <div className="address">{data.REFINE_ROADNM_ADDR}</div>
                                         <div className="tel"><span>전화번호</span>{data.MEDCARE_FACLT_TELNO}</div>
                                         <div className="found_date"><span>설립일자</span>{data.FOUND_DE}</div>
                                     </Item>
                                 )}
                             )
                         :
-                            <h3>
-                                목록이 존재하지 않습니다.
-                            </h3>
+                            <div className='non-list'>
+                                지역을 선택해주세요.
+                            </div>
                     }
                 </List>
             </animated.div>
@@ -185,7 +181,7 @@ function Detail() {
 export default Detail
 
 const Wrap = styled.div`
-    padding: 0 25px;
+    padding: 25px 25px;
 
     h1 {
         font-size: 15px;
@@ -194,9 +190,9 @@ const Wrap = styled.div`
         margin-bottom: 15px;
 
         span {
-            color: var(--second);
+            color: var(--primary);
             font-size: 18px;
-            margin-right: 10px;
+            margin-right: 5px;
         }
     }
 `
@@ -209,7 +205,7 @@ const Header = styled.div`
     background: ${({isOverClientHeight}) => isOverClientHeight ? 'rgba(0, 0, 0, 0.493)' : ''};
     backdrop-filter: ${({isOverClientHeight}) => isOverClientHeight ? 'blur(8px)' : ''};
     width: 100%;
-    padding: ${({isOverClientHeight}) => isOverClientHeight ? '25px' : '0px'};
+    padding: ${({isOverClientHeight}) => isOverClientHeight ? '20px 25px' : '0px'};
     transition: all 0.3s ease-out;
 `
 
@@ -264,7 +260,8 @@ const BackButton = styled.div`
 const SearchGroup = styled.div`
     padding: 0px 8px;
     width: 100%;
-    border: 2px solid var(--borderColor);
+    border: 2px solid var(--primary);
+    box-shadow: 0px 3px 5px rgba(69, 196, 133, 0.397);
     border-radius: 4px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -277,22 +274,33 @@ const SearchItem = styled.div`
 `
 
 const SearchLabel = styled.div`
-    width: 30%;
+    width: 40%;
     color: var(--second);
     text-align: center;
 `
 
 const SearchForm = styled.div`
-    width: 70%;
+    width: 60%;
 `
 
 const List = styled.div`
     margin-top: 15px;
+    padding-bottom: 30px;
+
+    .non-list {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 200px;
+    }
 `
 
 const Item = styled.div`
     padding: 15px;
-    border-bottom: 1px solid var(--borderColor);
+    border-radius: 6px;
+    border: 2px solid #4a4a4d;
+    margin-bottom: 10px;
 
     span {
         margin-right: 10px;
@@ -301,5 +309,26 @@ const Item = styled.div`
     & > div {
         line-break: auto;
         margin-bottom: 6px;
+    }
+
+    .type {
+        padding: 2px 6px;
+        border-radius: 4px;
+        width: fit-content;
+        font-size: 11px;
+    }
+
+    .h01 { color: #fff; background: #cf5050; }
+    .h02 { color: #fff; background: #dd7732; }
+    .h03 { color: #fff; background: #80ad55; }
+    .h04 { color: #fff; background: #355496; }
+    .h05 { color: #fff; background: #ca5888; }
+
+    .name {
+        font-size: 15px;
+    }
+    
+    .address {
+        font-size: 11px;
     }
 `

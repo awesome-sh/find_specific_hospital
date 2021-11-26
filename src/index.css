@@ -61,6 +61,14 @@ body {
   letter-spacing: -0.3px;
 }
 
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #90d4c0;
+}
+
 ul {
   list-style: none;
 }
@@ -78,11 +86,6 @@ select {
     -moz-transition: all 0.3s ease-out;
     -ms-transition: all 0.3s ease-out;
     -o-transition: all 0.3s ease-out;
-}
-
-select:focus {
-  border: 2px solid var(--primary);
-  box-shadow: 0px 3px 5px rgba(69, 196, 133, 0.397);
 }
 
 textarea {
