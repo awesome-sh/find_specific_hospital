@@ -193,7 +193,7 @@ const GroupItem = styled.div`
     border: 2px solid var(--borderColor);
     border-radius: 4px;
     padding-left: 10px;
-    font-size: 14px;
+    font-size: 13px;
     transition: all 0.3s ease-out;
 
     &:hover {

@@ -4,6 +4,7 @@ import Top from './components/Top'
 import useClientSize from './hooks/useClientSize'
 import { Detail, Main, Splash } from './pages'
 import { useState } from 'react'
+import Bottom from './components/Bottom'
 
 function App() {
 	const clientSize = useClientSize()
@@ -24,6 +25,7 @@ function App() {
 						<Route path="/:category" element={ 
 							<>
 								<Detail />
+								<Bottom />
 							</>  
 						} />
 						<Route exact path="/" element={ <Splash /> } />

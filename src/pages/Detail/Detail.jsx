@@ -12,6 +12,9 @@ import useClientSize from '../../hooks/useClientSize'
 import MapIcon from '../../assets/icon/location.png'
 import PhoneIcon from '../../assets/icon/phone-call.png'
 
+import StarOn from '../../assets/icon/star-on.png'
+import StarOff from '../../assets/icon/star-off.png'
+
 function Detail() {
     const navigate = useNavigate()
     const { category } = useParams()
@@ -167,7 +170,7 @@ function Detail() {
                                         <div className="right">
                                             <ul>
                                                 <li><img src={MapIcon} alt="img"/></li>
-                                                <li><img src={PhoneIcon} alt="img"/></li>
+                                                <li><img src={StarOff} alt="img"/></li>
                                             </ul>
                                         </div>
                                     </Item>
@@ -212,7 +215,7 @@ const Header = styled.div`
     backdrop-filter: ${({isOverClientHeight}) => isOverClientHeight ? 'blur(8px)' : ''};
     width: 100%;
     padding: ${({isOverClientHeight}) => isOverClientHeight ? '20px 25px' : '0px'};
-    transition: all 0.3s ease-out;
+    transition: all 0.2s ease-out;
 `
 
 const HeaderTop = styled.div`
@@ -320,7 +323,7 @@ const Item = styled.div`
     .right {
         width: 15%;
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
 
         ul {
@@ -378,10 +381,15 @@ const Item = styled.div`
     .h05 { color: #fff; background: #ca5888; }
 
     .name {
-        font-size: 15px;
+        font-size: 13px;
     }
     
     .address {
+        font-size: 11px;
+    }
+
+    .tel {
+        letter-spacing: 0.5px;
         font-size: 11px;
     }
 `
