@@ -46,8 +46,7 @@ const BottomWrap = styled.div`
     bottom: 0;
     width: 100%;
     height: 55px;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
+    border-top-left-radius: 50px;
     background: linear-gradient(var(--deep), var(--third));
     display: flex;
     align-items: center;
