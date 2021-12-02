@@ -2,8 +2,6 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-// LogoIcon
-import LogoIcon from '../../assets/icon/hospital.png'
 import useClientSize from '../../hooks/useClientSize'
 import SearchBg from '../../assets/search.svg'
 

@@ -3,13 +3,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Top from './components/Top'
 import useClientSize from './hooks/useClientSize'
 import { Detail, Main, Splash } from './pages'
-import { useState } from 'react'
 import Bottom from './components/Bottom'
 
 function App() {
 	const clientSize = useClientSize()
 	const isPc = clientSize?.width > 500;
-	const [isSplash, setIsSplash] = useState(window.location.pathname === '/')
 
 	return (
 		<BrowserRouter>
@@ -29,7 +27,6 @@ function App() {
 							</>  
 						} />
 						<Route exact path="/" element={ <Splash /> } />
-						
 					</Routes>
 				</Wrap>
 			</Container>

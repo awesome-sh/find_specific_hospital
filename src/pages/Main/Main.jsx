@@ -61,14 +61,13 @@ function Main() {
 
     // States
     const [isDetail , setIsDetail] = useState( false )
-    const [detailData, setDetailData] = useState([])
+    // const [detailData, setDetailData] = useState([])
 
     /**
      * 해당 카테고리 디테일목록 조회
      * @param {String} category 
      */
     const handleDetail = (category) => {
-        // console.log(">> Clicked Category ", category)
         navigate(`/${category}`)
     }
 

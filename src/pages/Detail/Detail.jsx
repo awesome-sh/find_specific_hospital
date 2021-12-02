@@ -7,13 +7,9 @@ import OPEN_DATA from '../../data/gyeonggi-open-data.json'
 import { FindKoreanName } from '../../data/FindKoreanName'
 
 import LeftArrow from '../../assets/icon/left-arrow.png'
-import useClientSize from '../../hooks/useClientSize'
-
 import MapIcon from '../../assets/icon/location.png'
-import PhoneIcon from '../../assets/icon/phone-call.png'
-
-import StarOn from '../../assets/icon/star-on.png'
 import StarOff from '../../assets/icon/star-off.png'
+import MapBox from './MapBox'
 
 function Detail() {
     const navigate = useNavigate()
@@ -63,14 +59,11 @@ function Detail() {
         if(selectedSi !== selectedNextSi) {
             setSelectedSi(selectedNextSi)
             setSelectedGun('')
-        } 
-
-
+        }
         setDatas( result )
-    }, [selectedSi,selectedNextSi,  selectedGun])
+    }, [selectedSi, selectedNextSi, selectedGun])
 
     const [isOverClientHeight, setIsOverClientHeight] = useState(false)
-    const clientSize = useClientSize()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -97,92 +90,109 @@ function Detail() {
         from
     });
 
+    const [isMap, setIsMap] = useState(false)
+    const [mapData, setMapData] = useState()
+
+    const handleOpenMap = (data) => {
+        setIsMap(state => !state)
+        setMapData(data)
+    }
+
     return (
         <Wrap>
-            <BackButton onClick={() => navigate('/main')}>
+            <BackButton onClick={() => {
+                isMap ? setIsMap(state => !state) : navigate('/main')
+            }}>
                 <img src={LeftArrow} alt="img" />
             </BackButton>
 
-            <Header isOverClientHeight={isOverClientHeight}>
-                <HeaderTop isOverClientHeight={isOverClientHeight}>
-                    <h1>
-                        <span>{ FindKoreanName(category) }</span> 가능한 병원
-                    </h1>
+            {
+                !isMap ?
+                <>
+                    <Header isOverClientHeight={isOverClientHeight}>
+                        <HeaderTop isOverClientHeight={isOverClientHeight}>
+                            <h1>
+                                <span>{ FindKoreanName(category) }</span> 가능한 병원
+                            </h1>
 
-                    <div className="topBtn" onClick={() => window.scrollTo(0, 0)}>
-                        <img src={LeftArrow} alt="img" />
-                    </div>
-                </HeaderTop>
-
-                <SearchGroup>
-                    <SearchItem>
-                        <SearchLabel>지역</SearchLabel>
-                        <SearchForm>
-                            <select onChange={(e) => setSelectedNextSi(e.target.value)} value={selectedSi}>
-                                <option>선택</option>
-                                { siArr.length > 0 && siArr.map((si, idx) => 
-                                    <option key={idx}>{si}</option>
-                                )}
-                            </select>
-                        </SearchForm>
-                    </SearchItem>
-                    <SearchItem>
-                        <SearchLabel>구·동·읍·면</SearchLabel>
-                        <SearchForm>
-                            <select onChange={(e) => setSelectedGun(e.target.value)} value={selectedGun}>
-                                { gunArr.length > 0 ? 
-                                    <>
-                                        <option selected>선택</option>
-                                        {   
-                                            gunArr.map((gun, idx) => 
-                                                <option key={idx}>{gun}</option>
-                                            )
-                                        }
-                                    </>
-                                    :
-                                    <option>선택</option>
-                                }
-                            </select>
-                        </SearchForm>
-                    </SearchItem>
-                </SearchGroup>
-            </Header>
-
-            <animated.div style={customAnimation}>
-                <List>
-                    {
-                        datas.length > 0 ?
-                            datas.map((data, idx) => {
-                                return (
-                                    <Item key={idx}>
-                                        <div className="left">
-                                            <div className={
-                                                data.INDUTYPE_NM === '병원' ? 'type h01' 
-                                                : data.INDUTYPE_NM === '상급종합' ? 'type h02'
-                                                : data.INDUTYPE_NM === '요양병원' ? 'type h03'
-                                                : data.INDUTYPE_NM === '종합병원' ? 'type h04'
-                                                : 'type h05' // 의원
-                                            }>{data.INDUTYPE_NM}</div>
-                                            <div className="name">{data.MEDCARE_FACLT_NM}</div>
-                                            <div className="address">{data.REFINE_ROADNM_ADDR}</div>
-                                            <div className="tel">Tel) {data.MEDCARE_FACLT_TELNO}</div>
-                                        </div>
-                                        <div className="right">
-                                            <ul>
-                                                <li><img src={MapIcon} alt="img"/></li>
-                                                <li><img src={StarOff} alt="img"/></li>
-                                            </ul>
-                                        </div>
-                                    </Item>
-                                )}
-                            )
-                        :
-                            <div className='non-list'>
-                                지역을 선택해주세요.
+                            <div className="topBtn" onClick={() => window.scrollTo(0, 0)}>
+                                <img src={LeftArrow} alt="img" />
                             </div>
-                    }
-                </List>
-            </animated.div>
+                        </HeaderTop>
+
+                        <SearchGroup>
+                            <SearchItem>
+                                <SearchLabel>지역</SearchLabel>
+                                <SearchForm>
+                                    <select onChange={(e) => setSelectedNextSi(e.target.value)} value={selectedSi}>
+                                        <option>선택</option>
+                                        { siArr.length > 0 && siArr.map((si, idx) => 
+                                            <option key={idx}>{si}</option>
+                                        )}
+                                    </select>
+                                </SearchForm>
+                            </SearchItem>
+                            <SearchItem>
+                                <SearchLabel>구·동·읍·면</SearchLabel>
+                                <SearchForm>
+                                    <select onChange={(e) => setSelectedGun(e.target.value)} value={selectedGun}>
+                                        { gunArr.length > 0 ? 
+                                            <>
+                                                <option selected>선택</option>
+                                                {   
+                                                    gunArr.map((gun, idx) => 
+                                                        <option key={idx}>{gun}</option>
+                                                    )
+                                                }
+                                            </>
+                                            :
+                                            <option>선택</option>
+                                        }
+                                    </select>
+                                </SearchForm>
+                            </SearchItem>
+                        </SearchGroup>
+                    </Header>
+
+                    <animated.div style={customAnimation}>
+                        <List>
+                            {
+                                datas.length > 0 ?
+                                    datas.map((data, idx) => {
+                                        return (
+                                            <Item key={idx}>
+                                                <div className="left">
+                                                    <div className={
+                                                        data.INDUTYPE_NM === '병원' ? 'type h01' 
+                                                        : data.INDUTYPE_NM === '상급종합' ? 'type h02'
+                                                        : data.INDUTYPE_NM === '요양병원' ? 'type h03'
+                                                        : data.INDUTYPE_NM === '종합병원' ? 'type h04'
+                                                        : 'type h05' // 의원
+                                                    }>{data.INDUTYPE_NM}</div>
+                                                    <div className="name">{data.MEDCARE_FACLT_NM}</div>
+                                                    <div className="address">{data.REFINE_ROADNM_ADDR}</div>
+                                                    {/*<div className="tel">Tel) {data.MEDCARE_FACLT_TELNO}</div>}*/}
+                                                </div>
+                                                <div className="right">
+                                                    <ul>
+                                                        <li onClick={() => handleOpenMap(data)}><img src={MapIcon} alt="img"/></li>
+                                                        <li><img src={StarOff} alt="img"/></li>
+                                                    </ul>
+                                                </div>
+                                            </Item>
+                                        )}
+                                    )
+                                :
+                                    <div className='non-list'>
+                                        지역을 선택해주세요.
+                                    </div>
+                            }
+                        </List>
+                    </animated.div>
+                </>
+                :
+                <MapBox mapData={mapData} />
+            }
         </Wrap>
     )
 }
