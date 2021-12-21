@@ -105,6 +105,8 @@ function Main() {
                     </GroupSection>
                 </animated.div>
                 
+
+                {/*
                 <hr/>
                 
                 <animated.div style={customAnimation01}>
@@ -136,7 +138,7 @@ function Main() {
                         )}
                     </GroupSection>
                 </animated.div>
-                
+                */}
 
             </Content>
         </MainWrap>

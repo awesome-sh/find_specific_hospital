@@ -316,8 +316,9 @@ const List = styled.div`
 `
 
 const Item = styled.div`
-    padding: 15px;
-    border-bottom: 1px solid #4a4a4d;
+    padding: 25px;
+    background: #333333;
+    border-radius: 10px;
     margin-bottom: 10px;
     display: flex;
 
@@ -381,7 +382,7 @@ const Item = styled.div`
         padding: 2px 6px;
         border-radius: 4px;
         width: fit-content;
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .h01 { color: #fff; background: #cf5050; }
@@ -391,11 +392,13 @@ const Item = styled.div`
     .h05 { color: #fff; background: #ca5888; }
 
     .name {
-        font-size: 13px;
+        margin-top: 8px;
+        font-size: 14px;
     }
     
     .address {
         font-size: 11px;
+        color: #b6b6b6;
     }
 
     .tel {

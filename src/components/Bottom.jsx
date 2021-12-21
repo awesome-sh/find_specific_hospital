@@ -29,8 +29,10 @@ function Bottom() {
             <BottomWrap>
                 <ul>
                     <li onClick={() => navigate('/main')}><img src={Home} alt="img"/></li>
+                    {/*
                     <li><img src={StarOff} alt="img"/></li>
-                    <li><img src={Option} alt="img"/></li>
+                    <li onClick={() => navigate('/more')}><img src={Option} alt="img"/></li>
+                    */}
                 </ul>
             </BottomWrap>
         </animated.div>
@@ -46,7 +48,6 @@ const BottomWrap = styled.div`
     bottom: 0;
     width: 100%;
     height: 55px;
-    border-top-left-radius: 50px;
     background: linear-gradient(var(--deep), var(--third));
     display: flex;
     align-items: center;
