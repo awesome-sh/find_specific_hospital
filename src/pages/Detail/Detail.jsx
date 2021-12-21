@@ -98,6 +98,25 @@ function Detail() {
         setMapData(data)
     }
 
+    /**
+     * 중복체크 필요
+     * @param {*} data : Hospital Data
+     */
+    const addFavorite = ( data ) => {
+        let newFavorite = localStorage.getItem('favorite') || []
+
+        if(newFavorite.length > 0) {
+            newFavorite = JSON.parse(newFavorite)
+            newFavorite.push( data )
+            localStorage.setItem('favorite', JSON.stringify( newFavorite ))
+        } else {
+            newFavorite.push( data )
+            localStorage.setItem('favorite', JSON.stringify( newFavorite ))
+        }
+
+        alert('즐겨찾기에 추가되었습니다.')
+    }
+
     return (
         <Wrap>
             <BackButton onClick={() => {
@@ -176,7 +195,7 @@ function Detail() {
                                                 <div className="right">
                                                     <ul>
                                                         <li onClick={() => handleOpenMap(data)}><img src={MapIcon} alt="img"/></li>
-                                                        <li><img src={StarOff} alt="img"/></li>
+                                                        <li onClick={() => addFavorite(data)}><img src={StarOff} alt="img"/></li>
                                                     </ul>
                                                 </div>
                                             </Item>
@@ -302,7 +321,7 @@ const SearchForm = styled.div`
     width: 60%;
 `
 
-const List = styled.div`
+export const List = styled.div`
     margin-top: 25px;
     padding-bottom: 30px;
 
@@ -315,7 +334,7 @@ const List = styled.div`
     }
 `
 
-const Item = styled.div`
+export const Item = styled.div`
     padding: 25px;
     background: #333333;
     border-radius: 10px;

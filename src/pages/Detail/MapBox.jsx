@@ -5,6 +5,11 @@ import { Map, CustomOverlayMap } from 'react-kakao-maps-sdk'
 
 function MapBox({ mapData }) {
     const clientSize = useClientSize()
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+    
     return (
         <>
             <MapWrap clientSize={clientSize}>

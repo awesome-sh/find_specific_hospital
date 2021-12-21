@@ -29,10 +29,8 @@ function Bottom() {
             <BottomWrap>
                 <ul>
                     <li onClick={() => navigate('/main')}><img src={Home} alt="img"/></li>
-                    {/*
-                    <li><img src={StarOff} alt="img"/></li>
+                    <li onClick={() => navigate('/favorite')}><img src={StarOff} alt="img"/></li>
                     <li onClick={() => navigate('/more')}><img src={Option} alt="img"/></li>
-                    */}
                 </ul>
             </BottomWrap>
         </animated.div>
