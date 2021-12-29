@@ -31,10 +31,17 @@ function MapBox({ mapData }) {
                 </Map>
             </MapWrap>
 
-            {/* 작업필요 */}
+            {/* 
+            작업필요 
             <Middle>
-                <li onClick={() => findRoad(mapData.MEDCARE_FACLT_NM, mapData.REFINE_WGS84_LAT, mapData.REFINE_WGS84_LOGT)}>길찾기</li>
+                <li 
+                    onClick={() => findRoad(
+                        mapData.MEDCARE_FACLT_NM, 
+                        mapData.REFINE_WGS84_LAT, 
+                        mapData.REFINE_WGS84_LOGT
+                    )}>길찾기</li>
             </Middle>
+            */}
 
             <Content>
                 <ul>
