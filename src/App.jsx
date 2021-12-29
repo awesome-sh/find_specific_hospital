@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Top from './components/Top'
 import useClientSize from './hooks/useClientSize'
-import { Detail, Favorite, Main, More, Splash } from './pages'
+import { Detail, Favorite, Main, More, Document, Splash } from './pages'
 import Bottom from './components/Bottom'
 
 function App() {
@@ -18,6 +18,7 @@ function App() {
 							<>
 								<Top />
 								<Main />
+								<Bottom />
 							</> 
 						} />
 						<Route path="/:category" element={ 
@@ -34,7 +35,14 @@ function App() {
 						} />
 						<Route path="/more" element={ 
 							<>
+								<Top />
 								<More />
+								<Bottom />
+							</>  
+						} />
+						<Route path="/document" element={ 
+							<>
+								<Document />
 								<Bottom />
 							</>  
 						} />

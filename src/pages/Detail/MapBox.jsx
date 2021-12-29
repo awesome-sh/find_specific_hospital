@@ -9,6 +9,12 @@ function MapBox({ mapData }) {
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [])
+
+    const findRoad = ( name, lat, lon ) => {
+        const url = `https://map.kakao.com/link/to/${name},${lat},${lon}`
+        console.log( url )
+        window.open( url, '_blank' )
+    }
     
     return (
         <>
@@ -24,6 +30,11 @@ function MapBox({ mapData }) {
                     </CustomOverlayMap>
                 </Map>
             </MapWrap>
+
+            {/* 작업필요 */}
+            <Middle>
+                <li onClick={() => findRoad(mapData.MEDCARE_FACLT_NM, mapData.REFINE_WGS84_LAT, mapData.REFINE_WGS84_LOGT)}>길찾기</li>
+            </Middle>
 
             <Content>
                 <ul>
@@ -66,9 +77,6 @@ const MapWrap = styled.div`
     overflow: hidden;
     width: 100%;
     height: 100%;
-    border-radius: 10px;
-    border: 4px solid var(--deep);
-    box-shadow: 0 3px 5px var(--deep2);
 `
 
 const MapInfo = styled.div`
@@ -78,6 +86,21 @@ const MapInfo = styled.div`
     color: #fff;
     border-radius: 15px;
     padding: 7px 15px;
+`
+
+const Middle = styled.ul`
+    width: 100%;
+
+    li {
+        cursor: pointer;
+        width: 100%;
+        height: 50px;
+        color: #fff;
+        background: var(--primary);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 `
 
 const Content = styled.div`
