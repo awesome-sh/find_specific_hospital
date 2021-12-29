@@ -27,6 +27,17 @@ function Detail() {
 
     const [selectedNextSi, setSelectedNextSi] = useState('')
 
+    const [favorites, setFavorites] = useState([])
+
+    useEffect(() => {
+        let localFavorite = localStorage.getItem('favorite') || []
+
+        if(localFavorite) {
+            localFavorite = JSON.parse(localFavorite)
+            setFavorites( localFavorite )
+        }
+    }, [])
+
     useEffect(() => {
         let findData = Object.keys( OPEN_DATA ).includes( category ) ? OPEN_DATA[category] : null;
 
@@ -103,10 +114,9 @@ function Detail() {
      * @param {*} data : Hospital Data
      */
     const addFavorite = ( data ) => {
-        let newFavorite = localStorage.getItem('favorite') || []
+        let newFavorite = favorites;
 
         if(newFavorite.length > 0) {
-            newFavorite = JSON.parse(newFavorite)
             newFavorite.push( data )
             localStorage.setItem('favorite', JSON.stringify( newFavorite ))
         } else {
@@ -115,6 +125,28 @@ function Detail() {
         }
 
         alert('즐겨찾기에 추가되었습니다.')
+    }
+
+
+    const isExist = (data) => {
+        let result = false;
+        let existFavorites = [];
+
+        if(favorites && favorites.length > 0) {
+            existFavorites = favorites.filter(v => v.MEDCARE_FACLT_NM === data.MEDCARE_FACLT_NM && v.REFINE_ROADNM_ADDR === data.REFINE_ROADNM_ADDR)
+        }
+
+        console.log( existFavorites )
+
+        if(existFavorites.length > 0) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    const isDuplicate = () => {
+        alert('이미 추가된 병원입니다.\n즐겨찾기 탭에서 삭제할 수 있습니다.')
     }
 
     return (
@@ -195,7 +227,11 @@ function Detail() {
                                                 <div className="right">
                                                     <ul>
                                                         <li onClick={() => handleOpenMap(data)}><img src={MapIcon} alt="img"/></li>
-                                                        <li onClick={() => addFavorite(data)}><img src={StarOff} alt="img"/></li>
+                                                        <li 
+                                                            className={isExist(data) ? 'selected' : null} 
+                                                            onClick={() => isExist(data) ? isDuplicate() : addFavorite(data)}>
+                                                                <img src={StarOff} alt="img" />
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </Item>
@@ -390,6 +426,12 @@ export const Item = styled.div`
         img {
             width: 16px;
             height: 16px;
+        }
+
+        .selected {
+            background: linear-gradient(160deg, var(--primary), var(--third));
+            border: 2px solid var(--primary);
+            box-shadow: 0px 3px 5px rgba(69, 196, 133, 0.397);
         }
     }
 

@@ -29,6 +29,7 @@ function App() {
 						} />
 						<Route path="/favorite" element={ 
 							<>
+								<Top />
 								<Favorite />
 								<Bottom />
 							</>  

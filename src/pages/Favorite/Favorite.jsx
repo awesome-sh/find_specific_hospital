@@ -4,14 +4,30 @@ import { List } from '../Detail/Detail'
 
 function Favorite() {
     const [favorites, setFavorites] = useState(null)
+    const [category, setCategory] = useState([])
+
+    const createCategory = (localFavorite) => {
+        const tempCategory = []
+        for(let fav of localFavorite) {
+            if(tempCategory.length > 0) {
+                if(!tempCategory.find(v => v === fav.SPECL_TREAT_NM)) {
+                    tempCategory.push( fav.SPECL_TREAT_NM )
+                }
+            } else {
+                tempCategory.push( fav.SPECL_TREAT_NM )
+            }
+        }
+
+        setCategory( tempCategory )
+    }
 
     useEffect(() => {
         let localFavorite = localStorage.getItem('favorite') || []
 
         if(localFavorite) {
             localFavorite = JSON.parse(localFavorite)
-            console.log( localFavorite )
             setFavorites( localFavorite )
+            createCategory( localFavorite )
         }
     }, [])
 
@@ -25,7 +41,9 @@ function Favorite() {
                     v.MEDCARE_FACLT_NM !== data.MEDCARE_FACLT_NM 
                     && v.MEDCARE_FACLT_TELNO !== data.MEDCARE_FACLT_TELNO)
                 localStorage.setItem('favorite', JSON.stringify( newFavorite ))
+
                 setFavorites( newFavorite )
+                createCategory( newFavorite )
                 window.alert('성공적으로 삭제되었습니다.')
             }
         }
@@ -37,34 +55,41 @@ function Favorite() {
 
             <Content>
                 {
-                    favorites && favorites.length > 0 ?
-                        <List>
-                            {
-                                favorites.map((data, idx) => {
-                                    return (
-                                        <Item key={idx}>
-                                            <div className="left">
-                                                <div className={
-                                                    data.INDUTYPE_NM === '병원' ? 'type h01' 
-                                                    : data.INDUTYPE_NM === '상급종합' ? 'type h02'
-                                                    : data.INDUTYPE_NM === '요양병원' ? 'type h03'
-                                                    : data.INDUTYPE_NM === '종합병원' ? 'type h04'
-                                                    : 'type h05' // 의원
-                                                }>{data.INDUTYPE_NM}</div>
-                                                <div className="name">{data.MEDCARE_FACLT_NM}</div>
-                                                <div className="address">{data.REFINE_ROADNM_ADDR}</div>
-                                                {/*<div className="tel">Tel) {data.MEDCARE_FACLT_TELNO}</div>}*/}
-                                            </div>
-                                            <div className="right">
-                                                <ul>
-                                                    <li onClick={() => removeFavorite(data)}>삭제</li>
-                                                </ul>
-                                            </div>
-                                        </Item>
-                                    )}
-                                )
-                            }
-                        </List>
+                    category && category.length > 0 ? 
+                        category.map(v => 
+                            <>
+                                <h3>{v}</h3>
+                                <List>
+                                    {
+                                        favorites.map((data, idx) => {
+                                            if(data.SPECL_TREAT_NM === v) {
+                                                return (
+                                                    <Item key={idx}>
+                                                        <div className="left">
+                                                            <div className={
+                                                                data.INDUTYPE_NM === '병원' ? 'type h01' 
+                                                                : data.INDUTYPE_NM === '상급종합' ? 'type h02'
+                                                                : data.INDUTYPE_NM === '요양병원' ? 'type h03'
+                                                                : data.INDUTYPE_NM === '종합병원' ? 'type h04'
+                                                                : 'type h05' // 의원
+                                                            }>{data.INDUTYPE_NM}</div>
+                                                            <div className="name">{data.MEDCARE_FACLT_NM}</div>
+                                                            <div className="address">{data.REFINE_ROADNM_ADDR}</div>
+                                                            {/*<div className="tel">Tel) {data.MEDCARE_FACLT_TELNO}</div>}*/}
+                                                        </div>
+                                                        <div className="right">
+                                                            <ul>
+                                                                <li onClick={() => removeFavorite(data)}>삭제</li>
+                                                            </ul>
+                                                        </div>
+                                                    </Item>
+                                                )}
+                                            }
+                                        )
+                                    }
+                                </List>
+                            </>
+                        )
                     :
                     <NoData>
                         즐겨찾기 목록이 존재하지 않아요<br />
@@ -81,22 +106,30 @@ export default Favorite
 
 const Wrap = styled.div`
     width: 100%;
-    padding: 25px 25px;
+    padding: 0px 25px 25px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
 
     h1 {
-        font-size: 18px;
+        font-size: 21px;
         font-weight: 300;
         color: var(--primary);
+        margin-bottom: 30px;
+        width: 100%;
     }
 `
 
 const Content = styled.div`
     width: 100%;
     overflow: hidden;
+
+    h3 {
+        width: 100%;
+        text-align: right;
+        font-size: 15px;
+    }
 `
 
 const NoData = styled.div`

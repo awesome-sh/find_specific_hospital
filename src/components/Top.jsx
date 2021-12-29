@@ -18,7 +18,7 @@ function Top() {
 
     const customAnimation = useSpring({ 
         loop: false,
-        delay: 300,
+        delay: 200,
         to,
         from
     });

@@ -12,7 +12,6 @@ function MapBox({ mapData }) {
 
     const findRoad = ( name, lat, lon ) => {
         const url = `https://map.kakao.com/link/to/${name},${lat},${lon}`
-        console.log( url )
         window.open( url, '_blank' )
     }
     
