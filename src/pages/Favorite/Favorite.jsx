@@ -143,10 +143,11 @@ const NoData = styled.div`
     text-align: center;
     font-size: 14px;
     line-height: 24px;
+    color: #b3b3b3;
 
     p {
         font-size: 12px;
-        color: #b8b8b8;
+        color: #868686;
     }
 `
 

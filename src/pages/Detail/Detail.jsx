@@ -137,8 +137,6 @@ function Detail() {
             existFavorites = favorites.filter(v => v.MEDCARE_FACLT_NM === data.MEDCARE_FACLT_NM && v.REFINE_ROADNM_ADDR === data.REFINE_ROADNM_ADDR)
         }
 
-        console.log( existFavorites )
-
         if(existFavorites.length > 0) {
             result = true;
         }
