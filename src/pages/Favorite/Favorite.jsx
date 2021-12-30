@@ -22,12 +22,13 @@ function Favorite() {
     }
 
     useEffect(() => {
-        let localFavorite = localStorage.getItem('favorite') || []
+        let localFavorite = window.localStorage.getItem('favorite') || JSON.stringify([])
 
-        if(localFavorite) {
-            localFavorite = JSON.parse(localFavorite)
+        if(localFavorite.length !== 0) {
             setFavorites( localFavorite )
             createCategory( localFavorite )
+        } else {
+            localFavorite = JSON.parse(localFavorite)
         }
     }, [])
 

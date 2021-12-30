@@ -30,11 +30,12 @@ function Detail() {
     const [favorites, setFavorites] = useState([])
 
     useEffect(() => {
-        let localFavorite = localStorage.getItem('favorite') || []
+        let localFavorite = window.localStorage.getItem('favorite') || JSON.stringify([])
 
-        if(localFavorite) {
-            localFavorite = JSON.parse(localFavorite)
+        if(localFavorite.length !== 0) {
             setFavorites( localFavorite )
+        } else {
+            localFavorite = JSON.parse(localFavorite)
         }
     }, [])
 
