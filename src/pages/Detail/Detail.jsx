@@ -32,11 +32,11 @@ function Detail() {
     useEffect(() => {
         let localFavorite = window.localStorage.getItem('favorite') || JSON.stringify([])
 
-        if(localFavorite.length !== 0) {
-            setFavorites( localFavorite )
-        } else {
+        if(localFavorite.length > 0) {
             localFavorite = JSON.parse(localFavorite)
         }
+
+        setFavorites( localFavorite )
     }, [])
 
     useEffect(() => {
